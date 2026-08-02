@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Research Radar — swipe prototype</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
+    background: radial-gradient(ellipse at 20% 15%, #3a2a6b 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 20%, #1d6b6b 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 90%, #6b2a4a 0%, transparent 55%),
+                #0b0b14;
+    overflow: hidden;
+  }
+  .stage {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0 12px;
+  }
+  .topbar {
+    width: 380px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    color: rgba(255,255,255,0.85);
+  }
+  .topbar .brand {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .topbar .counter {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    font-variant-numeric: tabular-nums;
+  }
+  .card-area {
+    position: relative;
+    width: 380px;
+    height: 560px;
+  }
+  .card {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.10) 100%);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.4);
+    padding: 22px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.35s cubic-bezier(.2,.9,.3,1), opacity 0.35s ease;
+    will-change: transform;
+  }
+  .card:active { cursor: grabbing; }
+  .card .sheen {
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 90px;
+    border-radius: 28px 28px 0 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent);
+    pointer-events: none;
+  }
+  .ring-badge {
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    margin-bottom: 14px;
+  }
+  .card h2 {
+    font-size: 21px;
+    line-height: 1.32;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.72);
+    margin-bottom: 14px;
+  }
+  .dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+  .match-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .match-bar {
+    flex: 1; height: 6px; border-radius: 4px;
+    background: rgba(255,255,255,0.18);
+    overflow: hidden;
+  }
+  .match-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, #7ee8c8, #7fb8ff);
+  }
+  .match-label { font-size: 12px; font-weight: 600; color: #dffef0; white-space: nowrap; }
+  .summary {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.92);
+    margin-bottom: 14px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .why {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.08);
+    border-left: 2px solid rgba(126,232,200,0.7);
+    padding: 8px 11px;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 14px;
+  }
+  .why b { color: #a9f2d8; font-weight: 600; }
+  .footer-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .verdict {
+    font-weight: 600; padding: 3px 10px; border-radius: 100px;
+    font-size: 11.5px; letter-spacing: 0.2px;
+  }
+  .v-read { background: rgba(126,232,200,0.22); color: #a9f2d8; }
+  .v-inspect { background: rgba(127,184,255,0.22); color: #bcdcff; }
+  .v-save { background: rgba(255,214,140,0.22); color: #ffe3ad; }
+
+  .stamp {
+    position: absolute; top: 34px; padding: 6px 16px;
+    border: 3px solid; border-radius: 10px;
+    font-size: 22px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; opacity: 0; pointer-events: none;
+    transform: rotate(-18deg);
+  }
+  .stamp-right { right: 26px; border-color: #7ee8c8; color: #7ee8c8; }
+  .stamp-left { left: 26px; border-color: #ff9d9d; color: #ff9d9d; transform: rotate(18deg); }
+
+  .actions {
+    display: flex; gap: 18px; margin-top: 22px;
+  }
+  .action-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    color: #fff; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .action-btn:hover { transform: scale(1.08); background: rgba(255,255,255,0.16); }
+  .action-btn:active { transform: scale(0.94); }
+  .action-btn.skip { color: #ff9d9d; }
+  .action-btn.save { color: #ffe3ad; width: 44px; height: 44px; font-size: 15px; align-self: center; }
+  .action-btn.important { color: #7ee8c8; }
+
+  .card-links {
+    display: flex; gap: 8px; margin-bottom: 12px;
+  }
+  .link-btn {
+    flex: 1; text-align: center; font-size: 12px; font-weight: 600;
+    padding: 8px 6px; border-radius: 10px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22);
+    color: #fff; text-decoration: none; cursor: pointer;
+  }
+  .link-btn:hover { background: rgba(255,255,255,0.18); }
+  .figure-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999;
+  }
+  .figure-modal {
+    width: 320px; max-height: 460px; overflow-y: auto;
+    background: linear-gradient(160deg, rgba(40,36,58,0.9), rgba(20,18,32,0.92));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 18px; color: #fff;
+  }
+  .figure-modal img { width: 100%; border-radius: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.06); }
+  .figure-modal .fig-caption { font-size: 12.5px; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 14px; }
+  .figure-modal .close-modal {
+    display: block; text-align: center; padding: 8px; border-radius: 100px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer; font-size: 12.5px;
+  }
+    color: rgba(255,255,255,0.6); text-align: center; font-size: 14px; line-height: 1.6;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%;
+  }
+  .empty b { color: #fff; font-size: 17px; display:block; margin-bottom: 8px; }
+  .empty .view-results-btn {
+    margin-top: 18px; padding: 10px 20px; border-radius: 100px;
+    background: rgba(126,232,200,0.18); border: 1px solid rgba(126,232,200,0.5);
+    color: #a9f2d8; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .results-btn {
+    font-size: 12px; color: rgba(255,255,255,0.65);
+    padding: 5px 12px; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.06);
+    cursor: pointer;
+  }
+  .results-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+  .results-panel {
+    width: 380px; height: 560px; border-radius: 28px;
+    background: linear-gradient(160deg, rgba(255,255,255,0.16), rgba(255,255,255,0.05));
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 20px 20px 16px;
+    color: #fff;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .results-summary {
+    display: flex; gap: 10px; margin-bottom: 16px;
+  }
+  .summary-chip {
+    flex: 1; text-align: center; padding: 10px 4px; border-radius: 14px;
+    background: rgba(255,255,255,0.08);
+  }
+  .summary-chip .num { font-size: 20px; font-weight: 700; display: block; }
+  .summary-chip .lbl { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.3px; }
+  .chip-important .num { color: #7ee8c8; }
+  .chip-save .num { color: #ffe3ad; }
+  .chip-skip .num { color: #ff9d9d; }
+  .results-table-wrap { flex: 1; overflow-y: auto; }
+  table.results-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.results-table th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.3px;
+    color: rgba(255,255,255,0.45); padding: 6px 8px; position: sticky; top: 0;
+    background: rgba(20,18,32,0.55); backdrop-filter: blur(4px);
+  }
+  table.results-table td {
+    padding: 9px 8px; border-top: 1px solid rgba(255,255,255,0.1);
+    vertical-align: top; color: rgba(255,255,255,0.9);
+  }
+  table.results-table td.title-cell { max-width: 170px; line-height: 1.35; }
+  .cat-badge {
+    font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 100px;
+    white-space: nowrap; display: inline-block;
+  }
+  .cat-important { background: rgba(126,232,200,0.2); color: #a9f2d8; }
+  .cat-save { background: rgba(255,214,140,0.2); color: #ffe3ad; }
+  .cat-skip { background: rgba(255,157,157,0.2); color: #ff9d9d; }
+  .back-btn {
+    margin-top: 14px; align-self: center; padding: 8px 18px; border-radius: 100px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; font-size: 12.5px; cursor: pointer;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.18); }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="topbar">
+    <div class="brand">Research Radar</div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="counter" id="counter">1 / 6</div>
+      <div class="results-btn" id="viewResultsTop">Today's results</div>
+    </div>
+  </div>
+  <div class="card-area" id="cardArea"></div>
+  <div class="actions">
+    <div class="action-btn skip" id="btnSkip" title="Skip">✕</div>
+    <div class="action-btn save" id="btnSave" title="Read later">◷</div>
+    <div class="action-btn important" id="btnImportant" title="Important">♥</div>
+  </div>
+</div>
+
+<script>
+let papers = [];
+let dataDate = "";
+
+async function loadTodayData() {
+  try {
+    const res = await fetch('today.json', { cache: 'no-store' });
+    const data = await res.json();
+    papers = (data.papers || []).map(p => ({ ...p, ring: p.ring || "auto" }));
+    dataDate = data.date || "";
+  } catch (e) {
+    papers = [];
+    console.error('Could not load today.json yet:', e);
+  }
+}
+
+function storageKey() {
+  return 'radar-decisions-' + (dataDate || 'unknown');
+}
+
+function loadDecisions() {
+  try {
+    const raw = localStorage.getItem(storageKey());
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function saveDecisions() {
+  try { localStorage.setItem(storageKey(), JSON.stringify(decisions)); } catch (e) {}
+}
+
+let idx = 0;
+let viewMode = 'swipe'; // 'swipe' | 'results'
+let decisions = []; // {title, ring, match, category}
+const area = document.getElementById('cardArea');
+const counter = document.getElementById('counter');
+const actionsBar = document.querySelector('.actions');
+const topResultsBtn = document.getElementById('viewResultsTop');
+
+function recordDecision(paper, category) {
+  decisions.push({ title: paper.title, ring: paper.ring, match: paper.match, category });
+  saveDecisions();
+}
+
+function renderCards() {
+  if (viewMode === 'results') { renderResults(); return; }
+  actionsBar.style.display = 'flex';
+  area.innerHTML = '';
+  if (idx >= papers.length) {
+    area.innerHTML = `<div class="empty"><b>You're caught up</b>All new papers triaged for today.<br>Field map syncs Sunday.<div class="view-results-btn" id="emptyResultsBtn">View today's results</div></div>`;
+    counter.textContent = `${papers.length} / ${papers.length}`;
+    document.getElementById('emptyResultsBtn').addEventListener('click', () => { viewMode = 'results'; renderCards(); });
+    return;
+  }
+  counter.textContent = `${idx + 1} / ${papers.length}`;
+  // render current + next 2 stacked behind
+  for (let i = Math.min(idx + 2, papers.length - 1); i >= idx; i--) {
+    area.appendChild(buildCard(papers[i], i - idx));
+  }
+}
+
+function categoryLabel(cat) {
+  if (cat === 'important') return { text: 'Important', cls: 'cat-important' };
+  if (cat === 'save') return { text: 'Read later', cls: 'cat-save' };
+  return { text: 'Skipped', cls: 'cat-skip' };
+}
+
+function renderResults() {
+  actionsBar.style.display = 'none';
+  const important = decisions.filter(d => d.category === 'important').length;
+  const save = decisions.filter(d => d.category === 'save').length;
+  const skip = decisions.filter(d => d.category === 'skip').length;
+  const rows = decisions.map(d => {
+    const c = categoryLabel(d.category);
+    return `<tr>
+      <td class="title-cell">${d.title}</td>
+      <td>${d.match}%</td>
+      <td><span class="cat-badge ${c.cls}">${c.text}</span></td>
+    </tr>`;
+  }).join('');
+  area.innerHTML = `
+    <div class="results-panel">
+      <div class="ring-badge" style="align-self:flex-start;">Today · ${new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'})}</div>
+      <div class="results-summary">
+        <div class="summary-chip chip-important"><span class="num">${important}</span><span class="lbl">Important</span></div>
+        <div class="summary-chip chip-save"><span class="num">${save}</span><span class="lbl">Read later</span></div>
+        <div class="summary-chip chip-skip"><span class="num">${skip}</span><span class="lbl">Skipped</span></div>
+      </div>
+      <div class="results-table-wrap">
+        <table class="results-table">
+          <thead><tr><th>Paper</th><th>Match</th><th>Category</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="3" style="color:rgba(255,255,255,0.5); padding-top:16px;">Nothing triaged yet — swipe a few cards first.</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div class="back-btn" id="backToSwipe">Back to today's cards</div>
+    </div>
+  `;
+  counter.textContent = `${decisions.length} / ${papers.length} triaged`;
+  document.getElementById('backToSwipe').addEventListener('click', () => { viewMode = 'swipe'; renderCards(); });
+}
+
+topResultsBtn.addEventListener('click', () => { viewMode = 'results'; renderCards(); });
+
+function buildCard(p, depth) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.style.transform = `translateY(${depth * 10}px) scale(${1 - depth * 0.04})`;
+  el.style.zIndex = 10 - depth;
+  el.style.opacity = depth === 2 ? 0.5 : 1;
+  el.innerHTML = `
+    <div class="sheen"></div>
+    <div class="ring-badge">${p.ring}</div>
+    <h2>${p.title}</h2>
+    <div class="meta-row">${p.meta}</div>
+    <div class="match-row">
+      <div class="match-bar"><div class="match-fill" style="width:${p.match}%"></div></div>
+      <div class="match-label">${p.match}% match</div>
+    </div>
+    <div class="summary">${p.summary}</div>
+    <div class="why">${p.why}</div>
+    <div class="card-links">
+      <a class="link-btn" href="${p.link}" target="_blank" rel="noopener">Read full paper ↗</a>
+      <div class="link-btn open-figures">Inspect figures</div>
+    </div>
+    <div class="footer-row">
+      <span>${p.figure}</span>
+      <span class="verdict ${p.verdictClass}">${p.verdict}</span>
+    </div>
+    <div class="stamp stamp-right">Important</div>
+    <div class="stamp stamp-left">Skip</div>
+  `;
+  const figBtn = el.querySelector('.open-figures');
+  figBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openFigureModal(p);
+  });
+  if (depth === 0) attachDrag(el);
+  return el;
+}
+
+function openFigureModal(p) {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'figure-modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="figure-modal">
+      <div style="width:100%; height:160px; border-radius:10px; margin-bottom:10px; background:linear-gradient(135deg, rgba(126,232,200,0.18), rgba(127,184,255,0.18)); display:flex; align-items:center; justify-content:center; font-size:13px; color:rgba(255,255,255,0.6);">${p.figure}</div>
+      <div class="fig-caption">${p.figureCaption}</div>
+      <div class="close-modal">Close</div>
+    </div>
+  `;
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) document.body.removeChild(backdrop); });
+  backdrop.querySelector('.close-modal').addEventListener('click', () => document.body.removeChild(backdrop));
+  document.body.appendChild(backdrop);
+}
+
+function attachDrag(el) {
+  let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false;
+  const stampR = el.querySelector('.stamp-right');
+  const stampL = el.querySelector('.stamp-left');
+
+  function pointerDown(e) {
+    dragging = true;
+    startX = (e.touches ? e.touches[0].clientX : e.clientX);
+    startY = (e.touches ? e.touches[0].clientY : e.clientY);
+    el.style.transition = 'none';
+  }
+  function pointerMove(e) {
+    if (!dragging) return;
+    const x = (e.touches ? e.touches[0].clientX : e.clientX);
+    const y = (e.touches ? e.touches[0].clientY : e.clientY);
+    dx = x - startX; dy = y - startY;
+    const rot = dx / 18;
+    el.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+    stampR.style.opacity = Math.max(0, Math.min(1, dx / 100));
+    stampL.style.opacity = Math.max(0, Math.min(1, -dx / 100));
+  }
+  function pointerUp() {
+    if (!dragging) return;
+    dragging = false;
+    el.style.transition = 'transform 0.35s cubic-bezier(.2,.9,.3,1), opacity 0.35s ease';
+    if (dx > 110) { swipeOut(el, 1); }
+    else if (dx < -110) { swipeOut(el, -1); }
+    else { el.style.transform = 'translate(0,0) rotate(0)'; stampR.style.opacity = 0; stampL.style.opacity = 0; }
+  }
+  el.addEventListener('mousedown', pointerDown);
+  window.addEventListener('mousemove', pointerMove);
+  window.addEventListener('mouseup', pointerUp);
+  el.addEventListener('touchstart', pointerDown, {passive:true});
+  el.addEventListener('touchmove', pointerMove, {passive:true});
+  el.addEventListener('touchend', pointerUp);
+}
+
+function swipeOut(el, dir) {
+  recordDecision(papers[idx], dir > 0 ? 'important' : 'skip');
+  el.style.transform = `translate(${dir * 700}px, -40px) rotate(${dir * 28}deg)`;
+  el.style.opacity = '0';
+  setTimeout(() => { idx++; renderCards(); }, 320);
+}
+
+function programmaticSwipe(dir) {
+  const el = area.querySelector('.card');
+  if (!el) return;
+  el.style.transition = 'transform 0.35s cubic-bezier(.2,.9,.3,1), opacity 0.35s ease';
+  swipeOut(el, dir);
+}
+
+document.getElementById('btnSkip').addEventListener('click', () => programmaticSwipe(-1));
+document.getElementById('btnImportant').addEventListener('click', () => programmaticSwipe(1));
+document.getElementById('btnSave').addEventListener('click', () => {
+  const el = area.querySelector('.card');
+  if (!el) return;
+  recordDecision(papers[idx], 'save');
+  el.style.transform = 'translateY(-650px) rotate(0deg) scale(0.9)';
+  el.style.opacity = '0';
+  setTimeout(() => { idx++; renderCards(); }, 320);
+});
+
+async function init() {
+  area.innerHTML = `<div class="empty"><b>Loading today's papers…</b>Fetching from today.json.</div>`;
+  await loadTodayData();
+  if (!papers.length) {
+    area.innerHTML = `<div class="empty"><b>No digest yet</b>Run the "daily-radar" GitHub Action once (Actions tab → Run workflow), then refresh this page.</div>`;
+    return;
+  }
+  decisions = loadDecisions();
+  idx = decisions.length; // resume where you left off today
+  renderCards();
+}
+init();
+</script>
+</body>
+</html>
