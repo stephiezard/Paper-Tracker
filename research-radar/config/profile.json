@@ -1,0 +1,19 @@
+{
+  "summary": "PhD project on physiological mitophagy and mitochondrial quality control (mito-QC / auto-QC reporters) in the ageing brain and heart, focused on Purkinje cells, pyramidal neurons and PV/SOM interneuron subtypes, integrated with spatial transcriptomics (Visium HD) and imaging. Also interested in interneuron identity/circuits and spatial method development (cell segmentation, registration).",
+  "trusted_people": [
+    "Thomas McWilliams", "Anna Rappe", "Ian Ganley", "Miratul Muqit",
+    "Alex Whitworth", "Elina Ikonen", "Gilad Silberberg", "Marie Carlen",
+    "Konstantinos Meletis", "Sten Linnarsson"
+  ],
+  "keywords": [
+    "mitophagy ageing brain",
+    "mito-QC reporter",
+    "mitochondrial quality control neurons",
+    "Purkinje cell mitochondria",
+    "PV SOM interneuron",
+    "Visium HD spatial transcriptomics",
+    "spatial transcriptomics brain ageing",
+    "cell segmentation spatial transcriptomics",
+    "autophagy neurodegeneration ageing"
+  ]
+}
