@@ -42,12 +42,21 @@ def fetch_europepmc(query, days=21):
     )
     with urllib.request.urlopen(url, timeout=30) as r:
         data = json.loads(r.read())
+    hit_count = data.get("hitCount", 0)
+    raw_results = data.get("resultList", {}).get("result", [])
+    print(f"  '{query}' -> hitCount={hit_count}, returned={len(raw_results)}")
     results = []
-    for item in data.get("resultList", {}).get("result", []):
+    for item in raw_results:
         doi = item.get("doi", "")
+        title = (item.get("title") or "").strip()
+        abstract = item.get("abstractText", "") or ""
+        # Fall back to title if no abstract is available yet (common for very
+        # fresh preprints) instead of silently dropping the paper.
+        content = abstract if abstract else title
         results.append({
-            "title": (item.get("title") or "").strip(),
-            "abstract": item.get("abstractText", "") or "",
+            "title": title,
+            "abstract": content,
+            "has_real_abstract": bool(abstract),
             "source": item.get("source", ""),
             "doi": doi,
             "date": item.get("firstPublicationDate", ""),
@@ -60,14 +69,15 @@ def gather_candidates():
     seen = {}
     for kw in PROFILE["keywords"]:
         try:
-            for p in fetch_europepmc(kw):
+            found = fetch_europepmc(kw)
+            for p in found:
                 key = p["doi"] or p["title"]
                 if key and key not in seen and p["abstract"]:
                     seen[key] = p
         except Exception as e:
             print("fetch error for", kw, "->", e)
         time.sleep(1)
-    print(f"Total unique candidates: {len(seen)}")
+    print(f"Total unique candidates after dedup: {len(seen)}")
     return list(seen.values())
 
 
