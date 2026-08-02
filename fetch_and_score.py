@@ -34,7 +34,7 @@ def clean_json(text):
     return json.loads(text)
 
 
-def fetch_europepmc(query, days=3):
+def fetch_europepmc(query, days=21):
     since = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
     q = f"({query}) AND FIRST_PDATE:[{since} TO {datetime.date.today().isoformat()}]"
     url = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?" + urllib.parse.urlencode(
