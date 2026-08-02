@@ -1,4 +1,89 @@
 {
   "date": "2026-08-02",
-  "papers": []
+  "papers": [
+    {
+      "title": "Mitophagy in neurodegeneration: crosstalk between PRKN/parkin-dependent and PRKN-independent pathways.",
+      "meta": "MED \u00b7 2026-07-31",
+      "match": 78,
+      "summary": "This paper reviews how mitochondria are selectively cleared from cells via mitophagy, comparing the well-known PRKN/parkin-PINK1 pathway with alternative PRKN-independent routes involving receptors like BNIP3, NIX, FUNDC1 and others. It discusses how these pathways can interact and compensate for one another, and how their dysregulation is implicated in neurodegenerative diseases such as Parkinson's disease. The review likely synthesizes molecular mechanisms and evidence from disease models to argue for a more integrated view of mitochondrial quality control in neurons.",
+      "why": "Understanding the interplay between <b>PRKN-dependent and PRKN-independent mitophagy pathways</b> is directly relevant to interpreting mito-QC/auto-QC reporter signals across different neuronal subtypes and ageing, since these subtypes may rely differentially on each pathway.",
+      "figure": "A schematic figure comparing molecular components and crosstalk points between PINK1/PRKN-dependent and receptor-mediated PRKN-independent mitophagy pathways.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "read fully",
+      "verdictClass": "v-read",
+      "link": "https://doi.org/10.1080/15548627.2026.2711596"
+    },
+    {
+      "title": "Exercise alleviates neuroinflammation and cognitive decline in aged mice via hepatic FGF21-driven microglial mitophagy.",
+      "meta": "MED \u00b7 2026-07-30",
+      "match": 72,
+      "summary": "This study investigates how exercise benefits aged mice by reducing brain inflammation and cognitive decline. The researchers found that exercise triggers the liver to produce FGF21, a hormone that signals to microglia in the brain. This signaling boosts mitophagy (clearance of damaged mitochondria) in microglia, which helps reduce neuroinflammation and preserve cognitive function.",
+      "why": "This paper connects systemic metabolic signaling to <b>microglial mitophagy as a mechanism of neuroprotection in aging</b>, offering a complementary organ-crosstalk perspective to your neuron-focused mitophagy studies in the aging brain.",
+      "figure": "Figure showing quantification of microglial mitophagy markers (e.g., mito-QC or mt-Keima reporter) in brains of sedentary vs. exercised aged mice, with and without FGF21 manipulation.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1016/j.bbi.2026.106935"
+    },
+    {
+      "title": "Mechanisms Underlying Perfluorooctanoic Acid-Induced Neuronal Loss and Cognitive Deficits: Disruption of Mitochondrial Dynamics, Impaired Mitophagy, and Blood-Brain Barrier Dysfunction.",
+      "meta": "MED \u00b7 2026-07-26",
+      "match": 72,
+      "summary": "This paper investigates how the environmental pollutant perfluorooctanoic acid (PFOA) causes neuron loss and memory/cognitive problems in an experimental model. It proposes that PFOA disrupts normal mitochondrial fission/fusion balance, impairs the cell's ability to clear damaged mitochondria via mitophagy, and damages the blood-brain barrier, allowing further toxic insult to the brain. Together these mechanisms are presented as an explanation for PFOA-associated neurodegeneration and cognitive decline.",
+      "why": "Since impaired mitophagy and mitochondrial dynamics are central mechanisms in this toxicology study, it offers a useful comparative or contrasting pathological context for interpreting <b>physiological mitophagy and mitochondrial quality control in the ageing brain</b> using mito-QC reporters.",
+      "figure": "A figure showing mitophagy flux/marker quantification (e.g., mito-QC or LC3/PINK1-Parkin staining) in neurons alongside mitochondrial morphology changes after PFOA exposure.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1016/j.neuro.2026.103533"
+    },
+    {
+      "title": "Metformin Ameliorates Diabetes-Associated Cognitive Dysfunction via p53/Parkin-Mediated Mitophagy.",
+      "meta": "MED \u00b7 2026-07-19",
+      "match": 68,
+      "summary": "This paper reports that metformin, a common diabetes drug, can improve cognitive dysfunction associated with diabetes in an animal model. The proposed mechanism involves activation of mitophagy (the selective clearance of damaged mitochondria) through a p53/Parkin-dependent pathway. The authors suggest this mitochondrial quality control effect helps protect neurons and preserve cognitive function under diabetic conditions.",
+      "why": "This work is relevant because it links pharmacological modulation of <b>p53/Parkin-mediated mitophagy</b> to neuronal health and cognition, offering a potential comparative pathway or intervention model for studies of physiological mitophagy and mitochondrial quality control in aging neurons.",
+      "figure": "A figure showing mitophagy flux markers (e.g., Parkin/p53 colocalization with mitochondria, or mito-QC-like reporter assays) in neurons before/after metformin treatment.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1111/dom.71093"
+    },
+    {
+      "title": "Electroacupuncture mitigates cognitive impairment caused by CPB by facilitating PINK1-dependent mitophagy and synaptic plasticity.",
+      "meta": "MED \u00b7 2026-07-23",
+      "match": 62,
+      "summary": "This study looks at whether electroacupuncture can help prevent cognitive problems caused by cardiopulmonary bypass (CPB) surgery. The researchers found that electroacupuncture works by boosting PINK1-dependent mitophagy, a process that clears out damaged mitochondria, and also supports synaptic plasticity, which is important for learning and memory. Together these effects appear to protect the brain from the cognitive decline often seen after CPB procedures.",
+      "why": "This paper reinforces the physiological importance of <b>PINK1-dependent mitophagy</b> in protecting neurons under systemic stress, directly relevant to the project's focus on mitochondrial quality control in ageing and vulnerable neuronal populations.",
+      "figure": "Figure showing PINK1/mitophagy marker quantification (e.g., mito-QC or LC3/PINK1 colocalization) in hippocampal neurons post-CPB with and without electroacupuncture treatment.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1016/j.bbr.2026.116395"
+    },
+    {
+      "title": "Interplay between RNA m&lt;sup&gt;6&lt;/sup&gt;A modification and transglutaminase 2 inhibitor effects on mitophagy dysfunction in Alzheimer's disease.",
+      "meta": "MED \u00b7 2026-07-27",
+      "match": 45,
+      "summary": "This paper explores how RNA m6A methylation, a chemical modification that regulates RNA stability and translation, interacts with transglutaminase 2 (TG2) inhibitors to affect mitophagy in Alzheimer's disease models. Mitophagy, the selective clearance of damaged mitochondria, is often dysfunctional in neurodegenerative disease, and this study suggests TG2 inhibition may influence this process partly through m6A-dependent RNA regulation. The abstract itself provides minimal detail on specific mechanisms, cell types, or experimental readouts used to link these pathways.",
+      "why": "This work touches on <b>mitophagy dysfunction in a neurodegenerative disease context</b>, which is directly relevant to understanding physiological mitochondrial quality control mechanisms that may go awry with ageing or disease in neuronal populations studied in the profile.",
+      "figure": "\u2014",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1016/j.drudis.2026.104748"
+    },
+    {
+      "title": "High-Intensity Interval Training Ameliorates Oxidative Stress and Mitophagy in Heart Tissue of Healthy Rats Following the Combination Use of Methylphenidate and Ethanol.",
+      "meta": "MED \u00b7 2026-07-27",
+      "match": 45,
+      "summary": "This study examines how high-intensity interval training (HIIT) affects heart tissue in rats exposed to methylphenidate combined with ethanol. The researchers looked at oxidative stress markers and mitophagy (the process of clearing damaged mitochondria) in cardiac tissue. Their findings suggest HIIT helps reduce oxidative damage and supports healthier mitophagy responses in the heart under these drug conditions.",
+      "why": "While focused on cardiac drug-exercise interactions rather than neuronal cell types, this paper is tangentially relevant to the profile's interest in <b>mitophagy and mitochondrial quality control in the heart</b>, though it lacks the spatial transcriptomics, imaging, or neuronal specificity central to the project.",
+      "figure": "A figure showing mitophagy marker (e.g., LC3-II/PINK1/Parkin) quantification across experimental groups (control, drug combination, HIIT, drug+HIIT) alongside oxidative stress markers.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "save only",
+      "verdictClass": "v-save",
+      "link": "https://doi.org/10.15288/jsad.25-00195"
+    }
+  ]
 }
