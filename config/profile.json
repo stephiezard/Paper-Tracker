@@ -1,19 +1,29 @@
 {
-  "summary": "PhD project on physiological mitophagy and mitochondrial quality control (mito-QC / auto-QC reporters) in the ageing brain and heart, focused on Purkinje cells, pyramidal neurons and PV/SOM interneuron subtypes, integrated with spatial transcriptomics (Visium HD) and imaging. Also interested in interneuron identity/circuits and spatial method development (cell segmentation, registration).",
+  "summary": "PhD project on mitophagy and autophagy in neurons in the brain, connected to spatial transcriptomics and spatial metabolomics, with particular emphasis on interneurons and perineuronal nets, and the use of AI/deep learning for image and data analysis in these areas.",
   "trusted_people": [
-    "Thomas McWilliams", "Anna Rappe", "Ian Ganley", "Miratul Muqit",
-    "Alex Whitworth", "Elina Ikonen", "Gilad Silberberg", "Marie Carlen",
-    "Konstantinos Meletis", "Sten Linnarsson"
+    "Thomas McWilliams", "Ian Ganley", "Noboru Mizushima", "Anne Simonsen",
+    "Vassiliki Nikoletopoulou", "Sandra Maday", "Oscar Marin", "Kenneth A Pelkey",
+    "Tommaso Pizzorusso", "Joakim Lundeberg", "Faisal Mahmood", "Alexandra Tzilivaki",
+    "Anu Wartiovaara", "Charles Brenner", "Nicholas Ktistakis", "Eeva-Liisa Eskelinen",
+    "Gordon Fishell", "Sanja Vickovic", "Patrik Stahl", "Alma Andersson",
+    "Sten Linnarsson", "Jan Mulder", "Alex Whitworth", "Sharon Tooze",
+    "Terje Johansen", "Miratul Muqit", "David Rubinsztein", "Adil Mardinoglu",
+    "Vassily Hatzimanikatis", "Emma Lundberg", "Pekka Katajisto", "Takao Hensch",
+    "Jessica Kwok"
   ],
   "keywords": [
     "mitophagy",
     "autophagy",
+    "neuronal autophagy",
     "mitochondrial quality control",
     "spatial transcriptomics",
     "spatial metabolomics",
     "Visium HD",
     "interneuron",
+    "perineuronal net",
     "Purkinje cell",
-    "brain ageing"
+    "brain ageing",
+    "in vivo imaging neurons",
+    "deep learning microscopy image analysis"
   ]
 }
