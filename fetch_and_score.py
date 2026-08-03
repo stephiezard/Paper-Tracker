@@ -6,6 +6,9 @@ API_URL = "https://api.anthropic.com/v1/messages"
 with open("config/profile.json") as f:
     PROFILE = json.load(f)
 
+SEEN_PATH = "docs/seen.json"
+SEEN_RETENTION_DAYS = 45  # how long a paper stays "already shown" before it can resurface
+
 
 def anthropic_call(model, system, user, max_tokens=500):
     body = json.dumps({
@@ -34,7 +37,23 @@ def clean_json(text):
     return json.loads(text)
 
 
-def fetch_europepmc(query, days=21):
+def load_seen():
+    try:
+        with open(SEEN_PATH) as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    cutoff = (datetime.date.today() - datetime.timedelta(days=SEEN_RETENTION_DAYS)).isoformat()
+    return {k: v for k, v in data.items() if v >= cutoff}
+
+
+def save_seen(seen_dict):
+    os.makedirs("docs", exist_ok=True)
+    with open(SEEN_PATH, "w") as f:
+        json.dump(seen_dict, f, indent=2)
+
+
+def _europepmc_request(query, days):
     since = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
     q = f"({query}) AND FIRST_PDATE:[{since} TO {datetime.date.today().isoformat()}]"
     url = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?" + urllib.parse.urlencode(
@@ -42,52 +61,81 @@ def fetch_europepmc(query, days=21):
     )
     with urllib.request.urlopen(url, timeout=30) as r:
         data = json.loads(r.read())
-    hit_count = data.get("hitCount", 0)
-    raw_results = data.get("resultList", {}).get("result", [])
-    print(f"  '{query}' -> hitCount={hit_count}, returned={len(raw_results)}")
-    results = []
-    for item in raw_results:
-        doi = item.get("doi", "")
-        title = (item.get("title") or "").strip()
-        abstract = item.get("abstractText", "") or ""
-        # Fall back to title if no abstract is available yet (common for very
-        # fresh preprints) instead of silently dropping the paper.
-        content = abstract if abstract else title
-        results.append({
-            "title": title,
-            "abstract": content,
-            "has_real_abstract": bool(abstract),
-            "source": item.get("source", ""),
-            "doi": doi,
-            "date": item.get("firstPublicationDate", ""),
-            "link": f"https://doi.org/{doi}" if doi else "https://europepmc.org",
-        })
-    return results
+    return data.get("hitCount", 0), data.get("resultList", {}).get("result", [])
 
 
-def gather_candidates():
-    seen = {}
+def _parse_result(item, from_trusted_author=False):
+    doi = item.get("doi", "")
+    title = (item.get("title") or "").strip()
+    abstract = item.get("abstractText", "") or ""
+    content = abstract if abstract else title
+    return {
+        "title": title,
+        "abstract": content,
+        "has_real_abstract": bool(abstract),
+        "authors": item.get("authorString", "") or "",
+        "source": item.get("source", ""),
+        "doi": doi,
+        "date": item.get("firstPublicationDate", ""),
+        "link": f"https://doi.org/{doi}" if doi else "https://europepmc.org",
+        "from_trusted_author": from_trusted_author,
+    }
+
+
+def fetch_by_keyword(query, days=21):
+    hit_count, raw = _europepmc_request(query, days)
+    print(f"  keyword '{query}' -> hitCount={hit_count}, returned={len(raw)}")
+    return [_parse_result(item) for item in raw]
+
+
+def fetch_by_trusted_author(name, days=60):
+    # Trusted-network papers get a longer lookback since we want to catch
+    # them even if they publish less frequently than a broad keyword search.
+    surname = name.strip().split()[-1]
+    query = f'AUTH:"{surname}"'
+    hit_count, raw = _europepmc_request(query, days)
+    print(f"  author '{name}' (searching '{surname}') -> hitCount={hit_count}, returned={len(raw)}")
+    return [_parse_result(item, from_trusted_author=True) for item in raw]
+
+
+def gather_candidates(seen_before):
+    pool = {}
+
     for kw in PROFILE["keywords"]:
         try:
-            found = fetch_europepmc(kw)
-            for p in found:
+            for p in fetch_by_keyword(kw):
                 key = p["doi"] or p["title"]
-                if key and key not in seen and p["abstract"]:
-                    seen[key] = p
+                if key and key not in seen_before and p["abstract"]:
+                    pool.setdefault(key, p)
         except Exception as e:
-            print("fetch error for", kw, "->", e)
+            print("keyword fetch error for", kw, "->", e)
         time.sleep(1)
-    print(f"Total unique candidates after dedup: {len(seen)}")
-    return list(seen.values())
+
+    for person in PROFILE["trusted_people"]:
+        try:
+            for p in fetch_by_trusted_author(person):
+                key = p["doi"] or p["title"]
+                if key and key not in seen_before and p["abstract"]:
+                    if key in pool:
+                        pool[key]["from_trusted_author"] = True
+                    else:
+                        pool[key] = p
+        except Exception as e:
+            print("author fetch error for", person, "->", e)
+        time.sleep(1)
+
+    print(f"Total unique new candidates (after excluding already-seen): {len(pool)}")
+    return list(pool.values())
 
 
 def score_candidates(candidates):
     scored = []
     for p in candidates[:40]:
+        author_note = f"\nAuthors: {p['authors']}" if p["authors"] else ""
         prompt = f"""Research profile: {PROFILE['summary']}
-Trusted people/labs: {', '.join(PROFILE['trusted_people'])}
+Trusted people/labs (papers involving these people should be scored highly if at all topically relevant): {', '.join(PROFILE['trusted_people'])}
 
-Paper title: {p['title']}
+Paper title: {p['title']}{author_note}
 Abstract: {p['abstract'][:1200]}
 
 Score 0-100 how relevant this paper is to the research profile above.
@@ -99,7 +147,12 @@ Reply with ONLY a JSON object like: {{"score": 82, "reason": "one sentence"}}"""
                 prompt, max_tokens=150,
             )
             j = clean_json(out)
-            p["score"] = int(j.get("score", 0))
+            score = int(j.get("score", 0))
+            # Deterministic network boost rather than relying solely on the
+            # model to notice the author match.
+            if p.get("from_trusted_author"):
+                score = min(100, score + 15)
+            p["score"] = score
             scored.append(p)
         except Exception as e:
             print("score error:", e)
@@ -135,16 +188,21 @@ VERDICT_CLASS = {
 
 
 def main():
-    candidates = gather_candidates()
+    seen_before = load_seen()
+    candidates = gather_candidates(seen_before)
     top = score_candidates(candidates)
     cards = []
+    today_str = datetime.date.today().isoformat()
+
     for p in top:
         try:
             s = summarize(p)
         except Exception as e:
             print("summarize error:", e)
             continue
+        ring_label = "trusted network" if p.get("from_trusted_author") else "auto"
         cards.append({
+            "ring": ring_label,
             "title": p["title"],
             "meta": f"{p['source']} · {p['date']}",
             "match": p["score"],
@@ -156,10 +214,14 @@ def main():
             "verdictClass": VERDICT_CLASS.get(s.get("verdict", "save only"), "v-save"),
             "link": p["link"],
         })
+        key = p["doi"] or p["title"]
+        seen_before[key] = today_str
+
     os.makedirs("docs", exist_ok=True)
     with open("docs/today.json", "w") as f:
-        json.dump({"date": datetime.date.today().isoformat(), "papers": cards}, f, indent=2)
-    print(f"Wrote {len(cards)} cards to docs/today.json")
+        json.dump({"date": today_str, "papers": cards}, f, indent=2)
+    save_seen(seen_before)
+    print(f"Wrote {len(cards)} cards to docs/today.json; seen.json now tracks {len(seen_before)} papers")
 
 
 if __name__ == "__main__":
