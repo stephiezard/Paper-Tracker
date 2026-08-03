@@ -20,10 +20,16 @@
     "spatial metabolomics",
     "Visium HD",
     "interneuron",
+    "Cellpose",
+    "Mitochondria",
+    "Cell segmentation",
+    "Mitochondria contact site",
     "perineuronal net",
-    "Purkinje cell",
+    "Alzheimer's",
+    "Parvalbumin",
     "brain ageing",
-    "in vivo imaging neurons",
+    "in vivo imaging",
+    "AI image analysis",
     "deep learning microscopy image analysis"
   ]
 }
