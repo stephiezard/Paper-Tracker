@@ -27,6 +27,6 @@ jobs:
         run: |
           git config user.name "research-radar-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add docs/today.json
+          git add docs/today.json docs/seen.json
           git commit -m "daily update $(date +%F)" || echo "no changes to commit"
           git push
