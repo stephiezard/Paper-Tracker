@@ -1,4 +1,109 @@
 {
-  "date": "2026-09-30",
-  "papers": []
+  "date": "2026-10-01",
+  "papers": [
+    {
+      "ring": "auto",
+      "title": "Lactylation-mediated activation of HSPA5 upregulates VGLL3 expression to inhibit mitophagy-dependent ferroptosis following intracerebral hemorrhage.",
+      "meta": "MED \u00b7 2026-09-28",
+      "match": 62,
+      "summary": "This study investigates how lactate-driven lactylation modifies the protein HSPA5, leading to increased levels of VGLL3 after intracerebral hemorrhage. This molecular cascade appears to suppress a form of mitophagy that would otherwise trigger ferroptosis (iron-dependent cell death). The findings suggest a protective mechanism where lactylation signaling helps limit neuronal damage by controlling mitochondrial quality control and cell death pathways after brain hemorrhage.",
+      "why": "This paper's focus on <b>mitophagy-dependent ferroptosis regulation in neurons</b> via lactylation signaling offers mechanistic insight directly relevant to the mitophagy/autophagy neuronal pathways central to this PhD project, even though it concerns hemorrhage rather than interneuron/PNN biology.",
+      "figure": "A figure showing the proposed lactylation-HSPA5-VGLL3-mitophagy-ferroptosis signaling pathway with mitochondrial/mitophagy markers in neurons post-ICH.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1080/15548627.2026.2726746"
+    },
+    {
+      "ring": "auto",
+      "title": "Autophagy Flux Is Remodeled Sex- and Cell Type-Specifically During Human Aging, and Is Linked to Reduced Physical Function in Older Adults.",
+      "meta": "MED \u00b7 2026-10-01",
+      "match": 58,
+      "summary": "This study examines how autophagy flux\u2014the rate at which cells break down and recycle damaged components\u2014changes during human aging in a sex- and cell type-specific manner. The researchers link these changes in autophagy to physical function decline in older adults, suggesting autophagy remodeling may contribute to age-related frailty. The findings highlight that aging affects autophagic processes differently depending on cell type and biological sex.",
+      "why": "Understanding how <b>autophagy flux</b> is remodeled with aging and differs by cell type provides broader physiological context for mitophagy/autophagy dynamics relevant to neuronal health and aging brain studies, even though this paper focuses on peripheral tissue rather than neurons.",
+      "figure": "\u2014",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "save only",
+      "verdictClass": "v-save",
+      "link": "https://doi.org/10.1111/acel.70734"
+    },
+    {
+      "ring": "auto",
+      "title": "Mitochondria Take Up and Dispose of Cytosolic Protein Aggregates.",
+      "meta": "MED \u00b7 2026-09-24",
+      "match": 45,
+      "summary": "This paper describes a newly discovered pathway in which mitochondria directly engulf misfolded or aggregated proteins from the cytosol. Once internalized, these aggregates appear to be processed and degraded using mitochondrial proteolytic machinery, suggesting mitochondria act as an additional protein quality control compartment. This challenges the traditional view that aggregate clearance is handled solely by the proteasome or autophagosome-lysosome pathway.",
+      "why": "This mechanism is directly relevant to <b>mitophagy and protein quality control in neurons</b>, since it suggests mitochondria may serve as an unexpected clearance route for aggregates implicated in neurodegeneration, with potential links to subsequent mitophagic turnover.",
+      "figure": "Figure showing live-cell imaging or electron microscopy of aggregate uptake into mitochondria over time.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "read fully",
+      "verdictClass": "v-read",
+      "link": "https://doi.org/10.1161/circresaha.126.329602"
+    },
+    {
+      "ring": "auto",
+      "title": "Restoration of mitophagy by crebanine suppresses sevoflurane-induced microglial activation and cognitive deficits by blocking mitochondrial DNA-triggered cGAS\u2013STING pathway",
+      "meta": "PPR \u00b7 2026-09-28",
+      "match": 45,
+      "summary": "This study looks at how sevoflurane, an anesthetic, triggers microglial activation and cognitive problems in the brain. The researchers found that a compound called crebanine can restore mitophagy, the process cells use to clear damaged mitochondria, which prevents mitochondrial DNA from leaking out and activating an inflammatory signaling pathway called cGAS-STING. By blocking this pathway, crebanine reduced microglial activation and improved cognitive outcomes in the experimental model.",
+      "why": "This paper connects <b>mitophagy restoration to neuroinflammatory and cognitive outcomes in the brain</b>, offering mechanistic insight relevant to understanding autophagy-related neuronal and glial dysfunction that could inform spatial transcriptomic/metabolomic studies of brain pathology.",
+      "figure": "A figure showing mitochondrial DNA release and cGAS-STING pathway activation in microglia before and after crebanine treatment",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.21203/rs.3.rs-11046128/v1"
+    },
+    {
+      "ring": "auto",
+      "title": "Dynamin-2 promotes Atg9A retrieval from phagophores during autophagy.",
+      "meta": "MED \u00b7 2026-09-21",
+      "match": 45,
+      "summary": "This paper investigates how Dynamin-2 helps recycle the protein Atg9A away from phagophores, which are the early membrane structures that form during autophagy. Atg9A normally shuttles lipids and membrane material to help build these phagophores into mature autophagosomes, and then needs to be retrieved for reuse. The study shows that Dynamin-2 plays a key role in pulling Atg9A back off these structures, helping regulate the autophagy process.",
+      "why": "Since mitophagy is a specialized form of autophagy, understanding core machinery like <b>Atg9A retrieval and Dynamin-2 function in phagophore dynamics</b> could inform mechanistic models of how neurons regulate mitochondrial clearance and autophagosome formation.",
+      "figure": "A figure showing live-cell imaging or time-lapse microscopy of Atg9A and Dynamin-2 localization dynamics on phagophores during autophagosome formation.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.1242/bio.062632"
+    },
+    {
+      "ring": "auto",
+      "title": "Mechanisms of Brain Aging and Their Links to Alzheimer's and Parkinson's Disease Pathology.",
+      "meta": "MED \u00b7 2026-09-21",
+      "match": 45,
+      "summary": "This paper is a review discussing the biological mechanisms underlying normal brain aging and how these processes overlap with or diverge from pathological changes seen in Alzheimer's and Parkinson's disease. It likely covers topics such as proteostasis decline, mitochondrial dysfunction, neuroinflammation, and cellular clearance pathways that change with age. The abstract provided is minimal, so specific findings or novel mechanisms are not detailed.",
+      "why": "Since mitophagy and autophagy decline are central features of both normal brain aging and neurodegenerative disease, this review could provide useful context for understanding <b>how age-related impairment of mitochondrial and protein clearance pathways in neurons intersects with disease-specific pathology</b>.",
+      "figure": "\u2014",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.3390/ijms27188426"
+    },
+    {
+      "ring": "auto",
+      "title": "PINK1-Associated Mitophagy Protects Against Cisplatin-Induced Ototoxicity by Regulating the Subcellular Distribution of ACSL4.",
+      "meta": "MED \u00b7 2026-09-14",
+      "match": 35,
+      "summary": "This study investigates how PINK1-mediated mitophagy protects inner ear cells from cisplatin-induced damage, a common side effect of chemotherapy that causes hearing loss. The researchers found that PINK1 influences where ACSL4, a protein involved in ferroptosis (iron-dependent cell death), is located within cells. By promoting healthy mitophagy, PINK1 appears to limit ACSL4's harmful subcellular activity, thereby reducing cisplatin-induced cell death and protecting hearing function.",
+      "why": "Although focused on the inner ear rather than brain neurons, this paper offers mechanistic insights into <b>PINK1-mediated mitophagy</b> and its regulation of ferroptosis-related proteins, which could inform parallel investigations of mitophagy pathways in neuronal vulnerability and protection within the brain.",
+      "figure": "A figure showing subcellular localization of ACSL4 in PINK1-knockout versus wild-type cells before and after cisplatin treatment, ideally with mitochondrial co-staining.",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "inspect figures",
+      "verdictClass": "v-inspect",
+      "link": "https://doi.org/10.3390/cells15181657"
+    },
+    {
+      "ring": "auto",
+      "title": "PDGF Signaling Modulates Autophagy Following Cellular Stress in Cranial Neural Crest Cells Across Vertebrate Species",
+      "meta": "PPR \u00b7 2026-09-28",
+      "match": 35,
+      "summary": "This paper investigates how PDGF (platelet-derived growth factor) signaling influences autophagy in cranial neural crest cells when they experience cellular stress. The research spans multiple vertebrate species, suggesting the mechanism may be evolutionarily conserved. The work connects a growth factor signaling pathway to the cellular process of autophagy during development, outside the context of mature neurons.",
+      "why": "While this paper focuses on developmental neural crest cells rather than mature brain neurons, the core finding that <b>PDGF signaling regulates autophagy following cellular stress</b> could offer mechanistic insight transferable to stress-induced autophagy/mitophagy pathways relevant to neuronal and interneuron biology.",
+      "figure": "\u2014",
+      "figureCaption": "Fetched automatically \u2014 no image preview in v1.",
+      "verdict": "save only",
+      "verdictClass": "v-save",
+      "link": "https://doi.org/10.21203/rs.3.rs-10923857/v1"
+    }
+  ]
 }
